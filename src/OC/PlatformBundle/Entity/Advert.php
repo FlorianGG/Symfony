@@ -283,6 +283,7 @@ class Advert
     {
         $this->applications[] = $application;
 
+        //on lie l'annonce à la candidature
         $application->setAdvert($this);
 
         return $this;

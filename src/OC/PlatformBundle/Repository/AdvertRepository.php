@@ -2,6 +2,7 @@
 
 namespace OC\PlatformBundle\Repository;
 
+use Doctrine\ORM\QueryBuilder;
 /**
  * AdvertRepository
  *
@@ -10,4 +11,87 @@ namespace OC\PlatformBundle\Repository;
  */
 class AdvertRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function myFindAll()//on recrée la fonction findAll()
+	{
+		// Méthode 2 : en passant par le raccourci (je recommande)
+		$queryBuilder = $this->createQueryBuilder('a');
+
+		//on crée un findALL donc on ajoute aucun critère
+		//car on a deja le SELECT et le FROM
+		
+		// On récupère la Query à partir du QueryBuilder
+		$query = $queryBuilder->getQuery();
+
+		// On récupère les résultats à partir de la Query
+		$results = $query->getResult();
+
+		return $results;
+	}
+
+	public function myFindOne($id)
+	{
+		$qb = $this->createQueryBuilder('a');
+		$qp->where('a.id = :id')
+			->setParameter('id', $id);
+		$query = $qb->getQuery();
+
+		$result = $query->getResult();
+
+		return $result;
+	}
+
+	public function findByAuthorAndDate($author, $year)
+	{
+		$qb = $this->createQueryBuilder('a');
+
+		$qb->where('a.author = :author')
+			->setParameter('author', $author )
+		->andWhere('a.date < :year')
+			->setParameter('year', $year)
+		->orderBy('a.date', 'DESC');
+
+		$query = $qb->getQuery();
+
+		$results = $query->getResult();
+
+		return $results;
+	}
+
+	public function whereCurentYear(QueryBuilder $qb) // afficher que les résutats de l'année courante
+	{
+		$qb->where('a.date BETWEEN :start AND :end')
+			->setParameter('start', new \DateTime(date('Y') .'-01-01'))
+			->setParameter('end', new \DateTime(date('Y') .'-12-31'));
+	}
+
+	public function myFind()
+	{
+		$qb = $this->createQueryBuilder('a');
+
+		$qb->where('a.author = :author')
+			->setParameter('author', 'Marine');
+
+		//on applique notre condition sur le queryBuilder
+		$this->whereCurentYear($qb);
+
+		$qb->orderBy('a.date', 'DESC');
+
+		return $qb->getQuery()->getResult();
+	}
+
+	public function getAdvertWithApplications()
+	{
+		$qb = $this->createQueryBuilder('a')->leftJoin('a.applications', 'app')->addSelect('app');
+
+		return $qb->getQuery()->getResult();
+	}
+
+	public function getAdvertWithCategories(array $categoryNames)//fonction qui récupère toutes les adverts en fonction des catégories en param
+	{
+		$qb = $this->createQueryBuilder('a')->leftJoin('a.categories', 'c')->addSelect('c');
+
+		$qb->where(expr()->in('c.name', $categoryNames));
+
+		return $qb->getQuery()->getResult();
+	}
 }
