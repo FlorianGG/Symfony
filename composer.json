@@ -1,6 +1,6 @@
 {
     "name": "florian/symfony",
-    "decription": "Projet intégré au cours OP sur Symfony",
+    "description": "Projet intégré au cours OP sur Symfony",
     "license": "proprietary",
     "type": "project",
     "autoload": {
