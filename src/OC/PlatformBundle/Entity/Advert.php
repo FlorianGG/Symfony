@@ -100,6 +100,11 @@ class Advert
      */
     private $slug;
 
+    /**
+     * @ORM\OneToMany(targetEntity="OC\PlatformBundle\Entity\AdvertSkill", mappedBy="advert")
+     */
+    private $advertSkill;
+
     public function __construct()
     {
         //Par défaut la date de l'annonce est la date d'aujourd'hui
@@ -446,5 +451,42 @@ class Advert
     public function getSlug()
     {
         return $this->slug;
+    }
+
+
+    /**
+     * Add advertSkill
+     *
+     * @param \OC\PlatformBundle\Entity\AdvertSkill $advertSkill
+     *
+     * @return Advert
+     */
+    public function addAdvertSkill(\OC\PlatformBundle\Entity\AdvertSkill $advertSkill)
+    {
+        $this->advertSkill[] = $advertSkill;
+
+        $advertSkill->setAdvert($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove advertSkill
+     *
+     * @param \OC\PlatformBundle\Entity\AdvertSkill $advertSkill
+     */
+    public function removeAdvertSkill(\OC\PlatformBundle\Entity\AdvertSkill $advertSkill)
+    {
+        $this->advertSkill->removeElement($advertSkill);
+    }
+
+    /**
+     * Get advertSkill
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAdvertSkill()
+    {
+        return $this->advertSkill;
     }
 }
