@@ -26,18 +26,21 @@ class AdvertController extends Controller
           'author'  => 'Alexandre',
           'content' => 'Nous recherchons un développeur Symfony débutant sur Lyon. Blabla…',
           'date'    => new \Datetime()),
+          'email'   => 'florian.prof@gmail.com',
         array(
           'title'   => 'Mission de webmaster',
           'id'      => 2,
           'author'  => 'Hugo',
           'content' => 'Nous recherchons un webmaster capable de maintenir notre site internet. Blabla…',
           'date'    => new \Datetime()),
+          'email'   => 'florian.prof@gmail.com',
         array(
           'title'   => 'Offre de stage webdesigner',
           'id'      => 3,
           'author'  => 'Mathieu',
           'content' => 'Nous proposons un poste pour webdesigner. Blabla…',
-          'date'    => new \Datetime())
+          'date'    => new \Datetime()),
+          'email'   => 'florian.prof@gmail.com'
       );
       return $this->render('OCPlatformBundle:Advert:index.html.twig', array(
         'listAdverts' => $listAdverts,
@@ -79,6 +82,7 @@ class AdvertController extends Controller
     $advert->setTitle('Recherche développpeur Symfony');
     $advert->setAuthor('Alexandre');
     $advert->setContent('Nous recherchons un développeur Symfony débutant sur Lyon. Blabla…');
+    $advert->setEmail('florian.prof@gmail.com');
     // On peut ne pas définir ni la date ni la publication,
     // car ces attributs sont définis automatiquement dans le constructeur
     
