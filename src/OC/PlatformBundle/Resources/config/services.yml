@@ -1,3 +1,5 @@
+# src/OC/PlatformBundle/Resources/config/services.yml
+
 services:
     oc_platform.antispam:
         class: OC\PlatformBundle\Antispam\OCAntispam
@@ -15,3 +17,4 @@ services:
             - "@oc_platform.email.application_mailer"
         tags:
             - { name: doctrine.event_listener, event: postPersist }
+

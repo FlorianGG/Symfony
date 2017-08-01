@@ -9,21 +9,21 @@ use OC\PlatformBundle\Entity\Skill;
 
 class LoadSkill implements FixtureInterface
 {
-	public function load(ObjectManager $manager)
-	{
-		//Liste des noms de compétences à ajouter
-		$names = array('PHP', 'Symfony', 'C++', 'Java', 'Photoshop', 'Blender', 'Bloc-Note');
+  public function load(ObjectManager $manager)
+  {
+    // Liste des noms de compétences à ajouter
+    $names = array('PHP', 'Symfony', 'C++', 'Java', 'Photoshop', 'Blender', 'Bloc-note');
 
-		foreach ($names as $name) {
-			//on crée la compétence
-			$skill = new Skill();
-			$skill->setName($name);
+    foreach ($names as $name) {
+      // On crée la compétence
+      $skill = new Skill();
+      $skill->setName($name);
 
-			//on la persiste
-			$manager->persist($skill);
-		}
+      // On la persiste
+      $manager->persist($skill);
+    }
 
-		//on déclencle l'enregistrement de toutes les skills
-		$manager->flush();
-	}
+    // On déclenche l'enregistrement de toutes les compétences
+    $manager->flush();
+  }
 }

@@ -8,39 +8,39 @@ Acceuil - {{ parent() }}
 
 {% block ocplatform_body %}
 <div class="row">
-	<h2>Liste des annonces</h2>
-	{% for advert in listAdverts %}
-	<div class="col-sm-4">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<img src="{{ advert.image.url }}" alt="{{ advert.image.alt }}" class="img-responsive">
-			</div>
-		  <div class="panel-body">
-		  		<a href="{{ path('oc_platform_view', {'id': advert.id}) }}">
-		  			{{ advert.title }}
-		  		</a>
-		  </div>
-		  <div class="panel-footer">
-		  		<small><em>Par {{ advert.author }}, le {{ advert.date|date('d/m/Y') }}</em></small>
-		  </div>
-		</div>
-	</div>
-	{% else %}
-		<div class="panel panel-default">
-		  <div class="panel-body">
-		  		<p>Pas (encore !) d'annonces</p>
-		  </div>
-		</div>
-	{% endfor %}
+  <h2>Liste des annonces</h2>
+  {% for advert in listAdverts %}
+  <div class="col-sm-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <img src="{{ advert.image.url }}" alt="{{ advert.image.alt }}" class="img-responsive">
+      </div>
+      <div class="panel-body">
+          <a href="{{ path('oc_platform_view', {'id': advert.id}) }}">
+            {{ advert.title }}
+          </a>
+      </div>
+      <div class="panel-footer">
+          <small><em>Par {{ advert.author }}, le {{ advert.date|date('d/m/Y') }}</em></small>
+      </div>
+    </div>
+  </div>
+  {% else %}
+    <div class="panel panel-default">
+      <div class="panel-body">
+          <p>Pas (encore !) d'annonces</p>
+      </div>
+    </div>
+  {% endfor %}
 </div>
 <div class="row">
-	<ul class="pagination">
-	  {# On utilise la fonction range(a, b) qui crée un tableau de valeurs entre a et b #}
-	  {% for p in range(1, nbPages) %}
-	    <li{% if p == page %} class="active"{% endif %}>
-	      <a href="{{ path('oc_platform_home', {'page': p}) }}">{{ p }}</a>
-	    </li>
-	  {% endfor %}
-	</ul>
+  <ul class="pagination">
+    {# On utilise la fonction range(a, b) qui crée un tableau de valeurs entre a et b #}
+    {% for p in range(1, nbPages) %}
+      <li{% if p == page %} class="active"{% endif %}>
+        <a href="{{ path('oc_platform_home', {'page': p}) }}">{{ p }}</a>
+      </li>
+    {% endfor %}
+  </ul>
 </div>
 {% endblock %}
