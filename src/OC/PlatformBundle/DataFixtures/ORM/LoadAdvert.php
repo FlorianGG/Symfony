@@ -6,16 +6,31 @@ namespace OC\PlatformBundle\DataFixtures\ORM;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use OC\PlatformBundle\Entity\Advert;
+use OC\PlatformBundle\Entity\Skill;
 use OC\PlatformBundle\Entity\Image;
 use OC\PlatformBundle\Entity\Application;
+use OC\PlatformBundle\Entity\AdvertSkill;
 
 class LoadAdvert implements FixtureInterface
 {
+
   // Dans l'argument de la méthode load, l'objet $manager est l'EntityManager
   public function load(ObjectManager $manager)
   {
-
     $jour = 30;
+    //On gère les compétences ici car je les utilise dans ce fichier, il faut
+    // Liste des noms de compétences à ajouter
+    $names = array('PHP', 'Symfony', 'C++', 'Java', 'Photoshop', 'Blender', 'Bloc-note', 'Laravel', 'Zend', 'Javascript', 'Back-End', 'Front-End', 'Web-App', 'NODE JS', 'REACT JS');
+
+    foreach ($names as $name) {
+      // On crée la compétence
+      $newSkill = new Skill();
+      $newSkill->setName($name);
+
+      // On la persiste
+      $manager->persist($newSkill);
+      $manager->flush();
+    }
 
     // Liste d'adverts
     $adverts = array(
@@ -35,7 +50,17 @@ class LoadAdvert implements FixtureInterface
           array(
             'author' => 'Raymond',
             'content' => 'J\'ai toutes les compétences requises pour ce poste !'
-          ))
+          )),
+        'skills' => array(
+          array(
+            'name' => 'Symfony',
+            'level' => 'Expert'
+            ),
+          array(
+            'name' => 'Back-End',
+            'level' => 'Expert'
+            ))
+
       ),
       array(
         'title'   => 'Mission de webmaster',
@@ -45,12 +70,26 @@ class LoadAdvert implements FixtureInterface
           array(
             'author' => 'Bob',
             'content' => 'Je suis ultra motivé !'
-          ))
+          )),
+        'skills' => array(
+          array(
+            'name' => 'Front-End',
+            'level' => 'Débutant'
+            ))
       ),
       array(
         'title'   => 'Offre de stage webdesigner',
         'author'  => 'Mathieu',
         'content' => 'Nous proposons un poste pour webdesigner. Blabla…',
+        'skills' => array(
+          array(
+            'name' => 'Photoshop',
+            'level' => 'Débutant'
+            ),
+          array(
+            'name' => 'Front-End',
+            'level' => 'Débutant'
+            ))
       ),
       array(
         'title'   => 'Recherche développpeur Laravel',
@@ -72,7 +111,16 @@ class LoadAdvert implements FixtureInterface
           array(
             'author' => 'Thomas',
             'content' => 'J\'ai plus de 10 ans d\'expérience sur ce framework !'
-          ))
+          )),
+        'skills' => array(
+          array(
+            'name' => 'Laravel',
+            'level' => 'Expert'
+            ),
+          array(
+            'name' => 'Back-End',
+            'level' => 'Expert'
+            ))
       ),
       array(
         'title'   => 'Mission de webmaster sur Marseille',
@@ -90,17 +138,35 @@ class LoadAdvert implements FixtureInterface
           array(
             'author' => 'Arthur',
             'content' => 'Un logement est possible ?'
-          ))
+          )),
+        'skills' => array(
+          array(
+            'name' => 'Front-End',
+            'level' => 'Expert'
+            ))
       ),
       array(
         'title'   => 'Offre de stage créateur web app',
         'author'  => 'Marcel',
         'content' => 'Nous proposons un stage pour réaliser une web app. Blabla…',
+        'skills' => array(
+          array(
+            'name' => 'Web-app',
+            'level' => 'Confirmé'
+            ),
+          array(
+            'name' => 'Back-End',
+            'level' => 'Confirmé'
+            ),
+          array(
+            'name' => 'Front-End',
+            'level' => 'Confirmé'
+            ))
       ),
       array(
         'title'   => 'Recherche développpeur Symfony',
-        'author'  => 'Alexandre',
-        'content' => 'Nous recherchons un développeur Symfony débutant sur Lyon. Blabla…',
+        'author'  => 'Arthur',
+        'content' => 'Nous recherchons un développeur Symfony débutant sur Kaaemlott. Blabla…',
         'applications' => array(
           array(
             'author' => 'Pauline',
@@ -113,7 +179,20 @@ class LoadAdvert implements FixtureInterface
           array(
             'author' => 'Kamel',
             'content' => 'J\'ai 3 ans d\'expérience chez Mac Donald'
-          ))
+          )),
+        'skills' => array(
+          array(
+            'name' => 'Symfony',
+            'level' => 'Confirmé'
+            ),
+          array(
+            'name' => 'Back-End',
+            'level' => 'Expert'
+            ),
+          array(
+            'name' => 'Front-End',
+            'level' => 'Expert'
+            ))
       ),
       array(
         'title'   => 'Mission de webmaster à Lille',
@@ -131,17 +210,40 @@ class LoadAdvert implements FixtureInterface
           array(
             'author' => 'Henri',
             'content' => 'Les tickets restaurants sont offerts ?'
-          ))
+          )),
+        'skills' => array(
+          array(
+            'name' => 'Back-End',
+            'level' => 'Débutant'
+            ),
+          array(
+            'name' => 'Front-End',
+            'level' => 'Confirmé'
+            ))
       ),
       array(
         'title'   => 'Offre de stage développeur Back-End',
         'author'  => 'Mohamed',
         'content' => 'Nous proposons un poste développeur Back-End. Blabla…',
+        'skills' => array(
+          array(
+            'name' => 'Symfony',
+            'level' => 'Débutant'
+            ),
+          array(
+            'name' => 'Laravel',
+            'level' => 'Débutant'
+            ),
+          array(
+            'name' => 'Back-End',
+            'level' => 'Débutant'
+            ))
         ),
+
       array(
         'title'   => 'Recherche développpeur Zend',
         'author'  => 'Julien',
-        'content' => 'Nous recherchons un développeur Laravel débutant sur Quimper. Blabla…',
+        'content' => 'Nous recherchons un développeur Zend débutant sur Quimper. Blabla…',
         'applications' => array(
           array(
             'author' => 'Céline',
@@ -154,17 +256,35 @@ class LoadAdvert implements FixtureInterface
           array(
             'author' => 'Adrien',
             'content' => 'Je suis un pro sur Zend !'
-          ))
+          )),
+        'skills' => array(
+          array(
+            'name' => 'Zend',
+            'level' => 'Expert'
+            ),
+          array(
+            'name' => 'Back-End',
+            'level' => 'Expert'
+            ))
       ),
       array(
         'title'   => 'Mission de webmaster sur Strasbourg',
         'author'  => 'XianLu',
-        'content' => 'Nous recherchons un webmaster sur Marseille, capable de maintenir notre site internet. Blabla…',
+        'content' => 'Nous recherchons un webmaster sur Strasbourg, capable de maintenir notre site internet. Blabla…',
+        'skills' => array(
+          array(
+            'name' => 'Back-End',
+            'level' => 'Confirmé'
+            ),
+          array(
+            'name' => 'Front-End',
+            'level' => 'Confirmé'
+            ))
       ),
       array(
         'title'   => 'Offre développeur Javascript, NODE JS, REACT JS',
         'author'  => 'Jean-Sebastien',
-        'content' => 'Nous recherchons un développeur frontend. Blabla…',
+        'content' => 'Nous recherchons un développeur Javascript, NODE JS, REACT JS. Blabla…',
         'applications' => array(
           array(
             'author' => 'Denis',
@@ -178,7 +298,20 @@ class LoadAdvert implements FixtureInterface
             'author' => 'Fred',
             'content' => 'Je suis très intéressé'
           )
-        )
+        ),
+        'skills' => array(
+          array(
+            'name' => 'Javascript',
+            'level' => 'Expert'
+            ),
+          array(
+            'name' => 'NODE JS',
+            'level' => 'Confirmé'
+            ),
+          array(
+            'name' => 'REACT JS',
+            'level' => 'Confirmé'
+            ))
       )
     );
 
@@ -206,10 +339,20 @@ class LoadAdvert implements FixtureInterface
           // On la persiste
           $manager->persist($application);
         }
-
       }
-        
 
+      if(!empty($newAdvert['skills'])) {
+        foreach ($newAdvert['skills'] as $newAdvertSkill) {
+          $advertSkill = new AdvertSkill();
+          $skillName = $newAdvertSkill['name'];
+          $skill = $manager->getRepository('OCPlatformBundle:Skill')->findOneBy(array('name' => $skillName));
+          $advertSkill->setLevel($newAdvertSkill['level']);
+          $advertSkill->setSkill($skill);
+          $advertSkill->setAdvert($advert);
+
+          $manager->persist($advertSkill);
+        }
+      }
       // On la persiste
       $manager->persist($advert);
     }

@@ -9,6 +9,19 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class AdvertRepository extends EntityRepository
 {
+  public function getAdvertsWithDeadline(\Datetime $date) //date qui sera définit dans le service en fonction du nombre de jour voulu
+  {
+    $results = $this->createQueryBuilder('a')
+      ->where('a.updatedAt <= :date') //on recherche d'abord par rapport à la date de modification
+      ->orWhere('a.updatedAt IS NULL AND a.date <= :date') //par contre elle peut être null donc doit vérifier aussi la date de création
+      ->andWhere('a.applications IS EMPTY') //enfin on sélectionne les adverts qui n'ont aucune applications
+      ->setParameter('date', $date) //on set le paramètre date avec la date en param
+      ->getQuery()
+      ->getResult();
+
+      return $results;
+  }
+  
   public function getAdverts($page, $nbPerPage)
   {
     $query = $this->createQueryBuilder('a')

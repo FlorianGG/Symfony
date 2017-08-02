@@ -11,6 +11,23 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AdvertController extends Controller
 {
+  public function purgeAction($days, Request $request)
+  {
+    if ($days < 1) {
+      throw new NotFoundHttpException('Veuillez indiquer un nombre de jour correct');
+    }
+
+    //on récupère le service
+    $purger = $this->container->get('oc_platform.purger.advert');
+
+    //on exécute la fonction purge
+    $purger->purge($days);
+
+    $request->getSession()->getFlashBag()->add('notice', 'Mission accomplie : Les annonces sans candidatures datant de plus de ' . $days . ' jours ont bien été purgées !');
+
+    return $this->redirectToRoute('oc_platform_home');
+
+  }
   public function indexAction($page)
   {
     if ($page < 1) {
@@ -19,7 +36,8 @@ class AdvertController extends Controller
 
     // Ici je fixe le nombre d'annonces par page à 3
     // Mais bien sûr il faudrait utiliser un paramètre, et y accéder via $this->container->getParameter('nb_per_page')
-    $nbPerPage = $this->container->getParameter('nb_per_page');
+    // $nbPerPage = $this->container->getParameter('nbPerPage');
+    $nbPerPage = 3;
 
     // On récupère notre objet Paginator
     $listAdverts = $this->getDoctrine()
@@ -68,7 +86,6 @@ class AdvertController extends Controller
       ->getRepository('OCPlatformBundle:AdvertSkill')
       ->findBy(array('advert' => $advert))
     ;
-
     return $this->render('OCPlatformBundle:Advert:view.html.twig', array(
       'advert'           => $advert,
       'listApplications' => $listApplications,
