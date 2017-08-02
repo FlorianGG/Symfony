@@ -12,9 +12,11 @@ Acceuil - {{ parent() }}
   {% for advert in listAdverts %}
   <div class="col-sm-4">
     <div class="panel panel-default">
-      <div class="panel-heading">
-        <img src="{{ advert.image.url }}" alt="{{ advert.image.alt }}" class="img-responsive">
-      </div>
+      {% if advert.image is not null %}
+        <div class="panel-heading">
+          <img src="{{ advert.image.url }}" alt="{{ advert.image.alt }}" class="img-responsive">
+        </div>
+      {% endif %}
       <div class="panel-body">
           <a href="{{ path('oc_platform_view', {'id': advert.id}) }}">
             {{ advert.title }}
