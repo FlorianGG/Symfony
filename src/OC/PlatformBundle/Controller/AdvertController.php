@@ -36,10 +36,7 @@ class AdvertController extends Controller
       throw new NotFoundHttpException('Page "'.$page.'" inexistante.');
     }
 
-    // Ici je fixe le nombre d'annonces par page à 3
-    // Mais bien sûr il faudrait utiliser un paramètre, et y accéder via $this->container->getParameter('nb_per_page')
-    // $nbPerPage = $this->container->getParameter('nbPerPage');
-    $nbPerPage = 3;
+    $nbPerPage = $this->container->getParameter('nbPerPage');
 
     // On récupère notre objet Paginator
     $listAdverts = $this->getDoctrine()

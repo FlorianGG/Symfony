@@ -11,8 +11,6 @@ class AdvertEditType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        // // Arbitrairement, on récupère toutes les catégories qui commencent par "D"
-        // $pattern = 'D%';
         $builder->remove('date');
     }
 
