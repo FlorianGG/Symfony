@@ -14,7 +14,7 @@ Acceuil - {{ parent() }}
     <div class="panel panel-default">
       {% if advert.image is not null %}
         <div class="panel-heading">
-          <img src="{{ advert.image.url }}" alt="{{ advert.image.alt }}" class="img-responsive">
+          <img src="{{ asset(advert.image.webPath) }}" alt="{{ advert.image.alt }}" class="img-responsive">
         </div>
       {% endif %}
       <div class="panel-body">

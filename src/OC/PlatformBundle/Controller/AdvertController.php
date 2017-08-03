@@ -8,13 +8,8 @@ use OC\PlatformBundle\Entity\Advert;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use OC\PlatformBundle\Form\AdvertType;
+use OC\PlatformBundle\Form\AdvertEditType;
 
 class AdvertController extends Controller
 {
@@ -105,15 +100,7 @@ class AdvertController extends Controller
     $advert = new Advert();
 
     //on créele formBuilder grâce à un service de formFactory
-    $form = $this->get('form.factory')->createBuilder(FormType::class, $advert)
-      ->add('date',      DateType::class)
-      ->add('title',     TextType::class)
-      ->add('content',   TextareaType::class)
-      ->add('author',    TextType::class)
-      ->add('email',     EmailType::class)
-      ->add('published', CheckboxType::class, array('required' => false))
-      ->add('save',      SubmitType::class)
-      ->getForm();
+    $form = $this->get('form.factory')->create(AdvertType::class, $advert);
 
     // Si la requête est en POST
     if ($request->isMethod('POST')) {
@@ -152,15 +139,7 @@ class AdvertController extends Controller
     }
 
     //on créele formBuilder grâce à un service de formFactory
-    $form = $this->get('form.factory')->createBuilder(FormType::class, $advert)
-      ->add('date',      DateType::class)
-      ->add('title',     TextType::class)
-      ->add('content',   TextareaType::class)
-      ->add('author',    TextType::class)
-      ->add('email',     EmailType::class)
-      ->add('published', CheckboxType::class, array('required' => false))
-      ->add('save',      SubmitType::class)
-      ->getForm();
+    $form = $this->get('form.factory')->create(AdvertEditType::class, $advert);
 
     // Si la requête est en POST
     if ($request->isMethod('POST')) {
@@ -188,7 +167,7 @@ class AdvertController extends Controller
     return $this->render('OCPlatformBundle:Advert:edit.html.twig', array('advert' => $advert , 'form' => $form->createView()));     
   }
 
-  public function deleteAction($id)
+  public function deleteAction($id, Request $request)
   {
     $em = $this->getDoctrine()->getManager();
 
@@ -198,14 +177,35 @@ class AdvertController extends Controller
       throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
     }
 
-    // On boucle sur les catégories de l'annonce pour les supprimer
-    foreach ($advert->getCategories() as $category) {
-      $advert->removeCategory($category);
-    }
+    // On crée un formulaire vide, qui ne contiendra que le champ CSRF
+    // Cela permet de protéger la suppression d'annonce contre cette faille
+    $form = $this->get('form.factory')->create();
 
-    $em->flush();
+
+    if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+      $skillsRepository = $em->getRepository('OCPlatformBundle:AdvertSkill');
+      $skills = $skillsRepository->findBy(array('advert' => $advert));
+      //on boucle sur le résultat pour les supprimer 1 à 1
+      foreach ($skills as $skill) {
+        $em->remove($skill);
+      }
+      $applicationRepository = $em->getRepository('OCPlatformBundle:Application');
+      $applications = $applicationRepository->findBy(array('advert' => $advert));
+      foreach ($applications as $application) {
+         $em->remove($application);
+      }
+      $em->remove($advert);
+      $em->flush();
+
+      $request->getSession()->getFlashBag()->add('info', "L'annonce a bien été supprimée.");
+
+      return $this->redirectToRoute('oc_platform_home');
+    }
     
-    return $this->render('OCPlatformBundle:Advert:delete.html.twig');
+    return $this->render('OCPlatformBundle:Advert:delete.html.twig', array(
+      'advert' => $advert,
+      'form'   => $form->createView(),
+    ));
   }
 
   public function menuAction($limit)
