@@ -4,6 +4,8 @@
 namespace OC\PlatformBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use OC\PlatformBundle\Validator\Antiflood;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="oc_application")
@@ -31,6 +33,7 @@ class Application
 
   /**
    * @ORM\Column(name="date", type="datetime")
+   * @Assert\DateTime()
    */
   private $date;
 
