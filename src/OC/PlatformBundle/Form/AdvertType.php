@@ -31,7 +31,7 @@ class AdvertType extends AbstractType
             ->add('content',    TextareaType::class)
             ->add('author',     TextType::class)
             ->add('email',      EmailType::class)
-            ->add('image',      ImageType::class)
+            ->add('image',      ImageType::class, array('required' => false))
             ->add('categories', EntityType::class, array(
                 'class'           => 'OCPlatformBundle:Category',
                 'choice_label'    => 'name',

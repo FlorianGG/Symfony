@@ -103,12 +103,10 @@ class AdvertController extends Controller
     if ($request->isMethod('POST')) {
       // On fait le lien requet <=> formulaire
       // À partir de maintenant, la variable $advert contient les valeurs entrées dans le formulaire par le visiteur
-      $form->handleRequest($request);
 
       // On vérifie que les valeurs entrées sont correctes
       // (Nous verrons la validation des objets en détail dans le prochain chapitre)
-      
-      if ($form->isValid()) {
+      if ($form->handleRequest($request)->isValid()) {
         // On enregistre notre objet $advert dans la base de données, par exemple
         $em = $this->getDoctrine()->getManager();
         $em->persist($advert);

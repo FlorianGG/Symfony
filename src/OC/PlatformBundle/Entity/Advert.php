@@ -6,11 +6,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 // N'oubliez pas ce use :
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Table(name="oc_advert")
  * @ORM\Entity(repositoryClass="OC\PlatformBundle\Repository\AdvertRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity(fields="title", message = "Une annonce existe déjà avec ce titre")
  */
 class Advert
 {
@@ -25,29 +28,29 @@ class Advert
 
   /**
    * @var \DateTime
-   *
    * @ORM\Column(name="date", type="datetime")
+   * @Assert\Datetime()
    */
   private $date;
 
   /**
    * @var string
-   *
-   * @ORM\Column(name="title", type="string", length=255)
+   * @ORM\Column(name="title", type="string", length=255, unique=true)
+   * @Assert\Length(min=10, minMessage = "Le titre doit posséder au moins {{ limit }} caractères")
    */
   private $title;
 
   /**
    * @var string
-   *
    * @ORM\Column(name="author", type="string", length=255)
+   * @Assert\Length(min=2, minMessage = "Le nom de l'auteur doit posséder au moins {{ limit }} caractères")
    */
   private $author;
 
   /**
    * @var string
-   *
    * @ORM\Column(name="content", type="string", length=255)
+   * @Assert\NotBlank(message = "Le contenu doit posséder au moins 1 caractère non blanc")
    */
   private $content;
 
@@ -58,6 +61,7 @@ class Advert
 
   /**
    * @ORM\OneToOne(targetEntity="OC\PlatformBundle\Entity\Image", cascade={"persist", "remove"})
+   * @Assert\Valid()
    */
   private $image;
 
@@ -92,6 +96,7 @@ class Advert
   /**
    * @Gedmo\Slug(fields={"title"})
    * @ORM\Column(name="slug", type="string", length=255, unique=true)
+   * @Assert\Email(message="L'adresse email n'est pas valide !!!")
    */
   private $slug;
 
