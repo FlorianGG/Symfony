@@ -36,7 +36,7 @@ class Advert
 
   /**
    * @var string
-   * @ORM\Column(name="title", type="string", length=255, unique=true)
+   * @ORM\Column(name="title", type="string", length=255)
    * @Assert\Length(min=10, minMessage = "Le titre doit posséder au moins {{ limit }} caractères")
    */
   private $title;
