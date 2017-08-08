@@ -3,6 +3,7 @@
 
 namespace OC\PlatformBundle\Event;
 
+use FOS\UserBundle\Model\UserInterface;
 use Symfony\Component\EventDispatcher\Event;
 
 class MessagePostEvent extends Event
