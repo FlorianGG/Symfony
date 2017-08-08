@@ -9,7 +9,11 @@
 {% block body %}
 
   {# On définit un sous-titre commun à toutes les pages du bundle, par exemple #}
-  <h1>Bonjour {{ app.user.username }}, voici nos annonces</h1>
+  {% if app.user.username is defined %}
+	<h1>Bonjour {{ app.user.username }}, voici nos annonces</h1>
+	{% else %}
+	    <h1>Bonjour, voici nos annonces</h1>
+  {% endif %}
 
   <hr>
 

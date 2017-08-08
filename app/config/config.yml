@@ -83,3 +83,19 @@ fos_user:
     from_email:
         address: "yourapp@yourapp.com"
         sender_name: "Demo String"
+
+services:
+  twig.extension.intl:
+    class: Twig_Extensions_Extension_Intl
+    tags:
+      - { name: twig.extension }
+
+# app/config/config.yml
+assetic:
+    debug:          '%kernel.debug%'
+    use_controller: '%kernel.debug%'
+    filters:
+        cssrewrite: ~
+        jsqueeze:   ~
+        scssphp:
+          formatter: 'Leafo\ScssPhp\Formatter\Compressed'

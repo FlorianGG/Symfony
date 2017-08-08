@@ -5,13 +5,13 @@
 namespace OC\PlatformBundle\Controller;
 
 use OC\PlatformBundle\Entity\Advert;
+use OC\PlatformBundle\Form\AdvertEditType;
+use OC\PlatformBundle\Form\AdvertType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use OC\PlatformBundle\Form\AdvertType;
-use OC\PlatformBundle\Form\AdvertEditType;
-// N'oubliez pas ce use pour l'annotation
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class AdvertController extends Controller
 {
@@ -63,17 +63,20 @@ class AdvertController extends Controller
     ));
   }
 
-  public function viewAction($id)
+  /**
+   * @ParamConverter("advert", options={"mapping": {"advert_id": "id"}})
+   */
+  public function viewAction(Advert $advert)
   {
     $em = $this->getDoctrine()->getManager();
 
-    // Pour récupérer une seule annonce, on utilise la méthode find($id)
-    $advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
+    // // Pour récupérer une seule annonce, on utilise la méthode find($id)
+    // $advert = $em->getRepository('OCPlatformBundle:Advert')->find($adver);
 
     // $advert est donc une instance de OC\PlatformBundle\Entity\Advert
     // ou null si l'id $id n'existe pas, d'où ce if :
     if (null === $advert) {
-      throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
+      throw new NotFoundHttpException("L'annonce d'id ".$advert->getId()." n'existe pas.");
     }
 
     // Récupération de la liste des candidatures de l'annonce
@@ -100,7 +103,6 @@ class AdvertController extends Controller
   public function addAction(Request $request)
   {
     $advert = new Advert();
-
     //on créele formBuilder grâce à un service de formFactory
     $form = $this->get('form.factory')->create(AdvertType::class, $advert);
 
@@ -112,6 +114,7 @@ class AdvertController extends Controller
       // On vérifie que les valeurs entrées sont correctes
       // (Nous verrons la validation des objets en détail dans le prochain chapitre)
       if ($form->handleRequest($request)->isValid()) {
+
         // On enregistre notre objet $advert dans la base de données, par exemple
         $em = $this->getDoctrine()->getManager();
         $em->persist($advert);
@@ -222,5 +225,10 @@ class AdvertController extends Controller
     return $this->render('OCPlatformBundle:Advert:menu.html.twig', array(
       'listAdverts' => $listAdverts
     ));
+  }
+
+  public function translationAction($name)
+  {
+    return $this->render("OCPlatformBundle:Advert:translation.html.twig", array('name' => $name));
   }
 }
